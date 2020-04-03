@@ -30,6 +30,11 @@
 % % load measuremnt parameters of the projection images
 clear all;
 % close all;
+%%% load dipimage, mpt3 and mtex toolbox
+load_diplib;
+load_mpt3; % see documentation, type 'mptdoc'
+load_mtex;
+
 load(fullfile(strcat(pwd,'\Examples'),'Input_8grains_MeshNr15.mat')); % an experimental LabDCT characterized sample
 
 exp_parameters; % always better to check the experimental parameters such as Lss, Lsd, detector dimensions and pixel size etc.
@@ -149,7 +154,7 @@ IntPair=[];
 for rot = [-146]  % rotation  angle
 
     % experimental LabDCT projections, starting from _0001 for -180 deg
-    ImageFolder='M:\MetaData\Projections_Dss14_Dsd14\Projections_16';
+	ImageFolder=strcat(pwd,'\Examples\ExpProjections');
     name1='proj';
     name3='.tiff';
 	

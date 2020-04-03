@@ -19,9 +19,9 @@
 clear all;
 % close all;
 %%% load dipimage, mpt3 and mtex toolbox
-% load_diplib;
-% load_mpt3; % see documentation, type 'mptdoc'
-% load_mtex;
+load_diplib;
+load_mpt3; % see documentation, type 'mptdoc'
+load_mtex;
 
 % several examples of input given here
 % load(fullfile(strcat(pwd,'\Examples'),'Input_8grains_MeshNr15.mat')); % an experimental LabDCT characterized sample
