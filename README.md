@@ -7,6 +7,7 @@ Installing external Matlab toolboxes that are free accessible:
 1. DIPimage: http://www.diplib.org/, for image processing.
 2. Multi-Parametric Toolbox 3 (mpt3): https://www.mpt3.org/, for generating Voronoi cells and polyheron mesh in 3D.
 3. MTEX toolbox: https://mtex-toolbox.github.io/, for analyzing and plotting crystallographic data.
+
 For convenience, I have attached the DIPimage 2.9, mtex 5.1.1 and mpt3 scripts in the folder.
 One can just colone the whole master file for running the code without the need to download these toolboxes.
 
@@ -30,7 +31,7 @@ You can run 'diffLabDCTsim_poly_3Dmesh_comp_exp_v3.m' provided you have mesh inp
 and also the experimental diffraction images.
 
 # Remind
-Always start with simulations for one projection at a certain rotation angle before running simulations for a whole dataset, e.g. 181 projections for a full rotation of 360 degrees.
+## Always start with simulations for one projection at a certain rotation angle before running simulations for a whole dataset, e.g. 181 projections for a full rotation of 360 degrees.
 
 
 
