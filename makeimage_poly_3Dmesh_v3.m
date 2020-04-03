@@ -19,11 +19,13 @@ elseif peakshape == 1
 end
 
 nr = size(A,1);
+ImStack_frame_cl=newcolorim([detysize detzsize],'RGB','uint8');
+ImStack_frame_cl_mask=newcolorim([detysize detzsize],'RGB','uint8');
+ImStack_frame_cl_mask_rest=~newcolorim([detysize detzsize],'RGB','uint8');
 nrefl=0;
 frame = zeros(detzsize,detysize);
 no = no+1;
 for jj=1:nr
-%         if i-5*peakwsig<=A(j,14) && A(j,14) <i+wstep+5*peakwsig
         int=A(jj,21);
         % Changed such that dety,detz has 0,0 in the center of the
         % lower right corner instead of 0,0 at the border.
@@ -102,7 +104,6 @@ for jj=1:nr
 
             end    
         end
-%         end
 end
 
 frame = frame + bgint*ones(detzsize,detysize); % Add constant background counts
@@ -264,6 +265,26 @@ for m=1:length(Gr_unique)
         %         end
                 label_pos = [label_pos;detysize-mean(A_filted(:,17)) detzsize-mean(A_filted(:,18))];
             end
+			hklno=find(hkl_square==(hklIndex_unique(nn,1)^2+hklIndex_unique(nn,2)^2+hklIndex_unique(nn,3)^2));
+%                 frame_select_bin_edge=dgg(frame_select_bin,1);
+%                 frame_select_bin_edge=frame_select_bin_edge~=0;
+%                 frame_select_bin_edge=berosion(frame_select_bin_edge,3,-2,1);
+			im1 = countneighbours(frame_select_bin,1,Inf,0);
+			im2=im1>=8;
+			frame_select_bin_edge=frame_select_bin-im2;
+%                 frame_select_bin_edge=bclosing(frame_select_bin_edge,2,-1,0);
+			frame_select_bin_edge=bdilation(frame_select_bin_edge,1,-1,0);
+			frame_cl=colorspace(frame_select_bin_edge,'RGB');
+			frame_cl_mask=~frame_cl;
+			frame_cl=dip_array(frame_cl,'double');
+			redChannel = frame_cl(:, :, 1)*hkl_color(hklno,1);
+			greenChannel = frame_cl(:, :, 2)*hkl_color(hklno,2);
+			blueChannel = frame_cl(:, :, 3)*hkl_color(hklno,3);
+			frame_cl=joinchannels('RGB',redChannel, greenChannel, blueChannel);            
+			ImStack_frame_cl(CropROI(1):CropROI(1)+CropROI(3)-1,CropROI(2):CropROI(2)+CropROI(4)-1)=frame_cl;
+			ImStack_frame_cl_mask(CropROI(1):CropROI(1)+CropROI(3)-1,CropROI(2):CropROI(2)+CropROI(4)-1)=frame_cl_mask;
+			frame_cl_mask_rest=newcolorim([length(frame_select_bin(1,:)) length(frame_select_bin(:,1))],'RGB','uint8');
+			ImStack_frame_cl_mask_rest(CropROI(1):CropROI(1)+CropROI(3)-1,CropROI(2):CropROI(2)+CropROI(4)-1)=frame_cl_mask_rest;
         end
         end
     end
@@ -301,6 +322,33 @@ imwrite(frame_bin,filename,'tif'); % Write out tiff file
 filename = sprintf('%s/%s%0.4d_label.tif',direc,prefix,rot_number-1); % Generate FILENAME of frame
 frame_label_im = flipud(fliplr(frame_label_im)); %flip frame to output images in correct direction
 imwrite(frame_label_im,filename,'tif'); % Write out tiff file
+
+%     ImStack_frame_cl=flipud(fliplr(ImStack_frame_cl));
+%     ImStack_frame_cl_mask=flipud(fliplr(ImStack_frame_cl_mask));
+Im=double(ImStack_frame_cl);
+Im_fliplr = flip(Im,2);
+Im_flipudlr = flip(Im_fliplr,1);
+redChannel = Im_flipudlr(:, :, 1);
+greenChannel = Im_flipudlr(:, :, 2);
+blueChannel = Im_flipudlr(:, :, 3);
+ImStack_frame_cl=joinchannels('RGB',redChannel, greenChannel, blueChannel);
+
+Im=double(ImStack_frame_cl_mask);
+Im_fliplr = flip(Im,2);
+Im_flipudlr = flip(Im_fliplr,1);
+redChannel = Im_flipudlr(:, :, 1);
+greenChannel = Im_flipudlr(:, :, 2);
+blueChannel = Im_flipudlr(:, :, 3);
+ImStack_frame_cl_mask=joinchannels('RGB',redChannel, greenChannel, blueChannel);
+
+Im=double(ImStack_frame_cl_mask_rest);
+Im_fliplr = flip(Im,2);
+Im_flipudlr = flip(Im_fliplr,1);
+redChannel = Im_flipudlr(:, :, 1);
+greenChannel = Im_flipudlr(:, :, 2);
+blueChannel = Im_flipudlr(:, :, 3);
+ImStack_frame_cl_mask_rest=joinchannels('RGB',redChannel, greenChannel, blueChannel);
+ImStack_frame_cl_mask=ImStack_frame_cl_mask+ImStack_frame_cl_mask_rest;
 
 %Write out tiff file for label image
 if exist('label_pos_unique','var') && exist('insertText.m','file')~=0

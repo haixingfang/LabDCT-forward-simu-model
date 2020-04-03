@@ -47,7 +47,7 @@ tthetamax = tthetamax*180/pi; % [deg]
 
 
 % grain size distribution
-grain_file=1; % 0: no grain file; 1: read grain information from external file such as .h file exported by GrainMapper
+grain_file=0; % 0: no grain file; 1: read grain information from external file such as .h file exported by GrainMapper
 grain_flag=1; % 0: manually generate; 1: call gen_micro_cylinder to generate grain structure
 mesh_flag=1; % 0: no 3D mesh on individual grain; 1: 3D mesh on individual grain
 grainsize_select=0; % 0: select all grains; 1: only select grains within the defined range
@@ -60,10 +60,10 @@ end
 % generagte virtual microstructure
 if grain_file==0
     % cylinder structure
-    % recommend two sample volumes: 100*100*150 or 400*400*600
-    Lx=100; % cylinder diameter [um]
-    Lz=150; % cylinder height [um]
-    gr_diameter=30; % average grain diameter [um]
+    % recommend sample volumes: 100*100*150, 200*200*300 or 400*400*600
+    Lx=200; % cylinder diameter [um]
+    Lz=300; % cylinder height [um]
+    gr_diameter=60; % average grain diameter [um]
     [A_P V_microstructure]=gen_micro_cylinder(Lx,Lz,gr_diameter);
     
 %     % gradient structre: from top to bottom, grains are small to large
@@ -97,7 +97,7 @@ if grain_file==0
     xlabel('d_{grain} (\mum)');
     ylabel('Probability density (\mum^{-1})');
     xlim([min(grainsize)- BIN_WIDTH/2 max(grainsize)+ BIN_WIDTH/2])
-    ylim([0 round(max(100*counts./(length(grainsize)*BIN_WIDTH)))/100]);
+    ylim([0 ceil(max(100*counts./(length(grainsize)*BIN_WIDTH)))/100]);
     set(gca,'fontsize',16);
     set(gca,'linewidth',1.5);
     box on;hold off;
@@ -108,8 +108,8 @@ if grain_file==0
            MeshNr(jj)=round(SingleGrain.volume^(1/3)/mean([pixelysize pixelzsize].*1000));
            % Adjust MeshNr for tuning the polyheron size
            % preferably to make sure polyheron size smaller than 12.5 um (at least smaller than 25 um)
-           if MeshNr(jj)>10
-               MeshNr(jj)=10;
+           if MeshNr(jj)>12
+               MeshNr(jj)=12;
            elseif MeshNr(jj)<2
                MeshNr(jj)=2;
            end
@@ -123,11 +123,12 @@ if grain_file==0
        for jj=1:MeshGrain
 %            ColorGrain=rand(1,3);
            ColorGrain=GrainColor(jj,:);
-           for kk=1:length(Vsub{jj}.Set)
-               Vsub{jj}.Set(kk).plot('color',ColorGrain,'alpha',0.15,'edgecolor','k','linewidth',0.25); % Adjust the transparancy
-%                Vsub{jj}.Set(kk).plot('alpha',0.15,'edgecolor','k','linewidth',0.75); % Adjust the transparancy
-%                Vsub{jj}.Set(kk).plot('alpha',0.15); % Adjust the transparancy
-           end
+           V_microstructure.Set(jj).plot('color',ColorGrain,'alpha',0.5,'edgecolor','k','linestyle','none','linewidth',0.75);
+%            for kk=1:length(Vsub{jj}.Set) % plot the mesh
+%                Vsub{jj}.Set(kk).plot('color',ColorGrain,'alpha',0.15,'edgecolor','k','linewidth',0.25); % Adjust the transparancy
+% %                Vsub{jj}.Set(kk).plot('alpha',0.15,'edgecolor','k','linewidth',0.75); % Adjust the transparancy
+% %                Vsub{jj}.Set(kk).plot('alpha',0.15); % Adjust the transparancy
+%            end
        end
        xlabel('x (\mum)','FontSize',16);
        ylabel('y (\mum)','FontSize',16);
@@ -383,6 +384,7 @@ if grain_file==1
         hold off
         box on;
         title('(a) Grain geometry');
+        %{ % plot the mesh can be very slow
         subplot(1,2,2);
         hold all;       
         for jj=1:length(grain_measure(DS.SeedID))
@@ -409,6 +411,7 @@ if grain_file==1
         hold off;
         box on;
         title('(b) 3D mesh');
+        %}
     elseif voxel_flag==1
 %         xx=dip_image(DS.GIDvol,'int8');
         xx=dip_image(DS.GIDvol(:,:,1:end-1),'int8');

@@ -4,6 +4,8 @@
 % (phi1, PHI, phi2) AND (phi1 + pi, -PHI, phi2 + pi)
 % We pick the one with phi1 in the range [-pi/2 pi/2]
 %
+%  Henning Poulsen, Risoe National Laboratory June 15, 2002.
+%
 % Fails if U(3,2) or U(2,3) = 0 e.g. then U(3,3) = ~1
 % If U(3,3) ~ 1 ph1 = ph2 = atan(U(2,1)/U(1,1))/2
 % In this case there is only one solution.

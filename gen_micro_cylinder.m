@@ -37,7 +37,7 @@ end
 eps=1e-6; % minimum error
 
 gen_flag=1;
-if gen_flag==1;
+if gen_flag==1
     %Generate positions potential nucleation sites and plot the 3d voronoi diagram
     theta=rand(1)*360;
     A1=[enlarge_Rx*rand(1)*cosd(theta) enlarge_Rx*rand(1)*sind(theta) rand(1)*enlarge_Lz-enlarge_Lz/2]-minus_edge;
