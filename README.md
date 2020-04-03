@@ -11,7 +11,7 @@ Installing external Matlab toolboxes that are free accessible:
 For convenience, I have attached the DIPimage 2.9, mtex 5.1.1 and mpt3 scripts in the folder.
 One can just colone the whole master file for running the code without the need to download these toolboxes.
 
-It is also recommended to have computer vision system toolbox installed with your own Matlab package.
+It is also recommended to have 'computer vision system toolbox' installed with your own Matlab package.
 
 All the codes have been tested executable with Matlab 2014b or above.
 However, it is preferentially to run the code with a Matlab version 2018b or later.
@@ -23,17 +23,15 @@ This step is to setup grain structure input, which can be virtual rendered or fr
 ## step 2 - run 'diffLabDCTsim_poly_3Dmesh.m'
 This requires input from step 1 to run the simulations of diffraction images.
 Note to remember check the experimental parameter defined in 'exp_parameters.m'.
-Images will be saved in the folder '\TFT\' and data saved in '\DA\' folder.
+Images will be saved in the '\TFT\' folder and data saved in the '\DA\' folder.
 
 # Others
 If you will to compare the simulated diffraction image with the experimental one.
 You can run 'diffLabDCTsim_poly_3Dmesh_comp_exp_v3.m' provided you have the mesh input of the experimental grain structure
 and also the experimental diffraction images, which by default named as 'proj0000.tiff' alike.
 
-The output images will be saved in the folder '\TFT_cmp\' and data saved in '\DA_cmp\' folder.
+The output images will be saved in the '\TFT_cmp\' folder and data saved in the '\DA_cmp\' folder.
 
 # Remind
 ## Always start with simulations for one projection at a certain rotation angle before running simulations for a whole dataset, e.g. 181 projections for a full rotation of 360 degrees.
-
-
 
