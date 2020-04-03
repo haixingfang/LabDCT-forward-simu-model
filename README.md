@@ -32,6 +32,8 @@ and also the experimental diffraction images, which by default named as 'proj000
 
 The output images will be saved in the '\TFT_cmp\' folder and data saved in the '\DA_cmp\' folder.
 
+Examples of input and one experimental LabDCT projection image can be found in the '\Examples\' folder.
+
 # Remind
 ## Always start with simulations for one projection at a certain rotation angle before running simulations for a whole dataset, e.g. 181 projections for a full rotation of 360 degrees.
 
