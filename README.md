@@ -26,7 +26,7 @@ Note to remember check the experimental parameter defined in 'exp_parameters.m'.
 Images will be saved in the '\TFT\' folder and data saved in the '\DA\' folder.
 
 # Others
-If you will to compare the simulated diffraction image with the experimental one.
+If you wish to compare the simulated diffraction image with the experimental one as well as analyzing experimental LabDCT data.
 You can run 'diffLabDCTsim_poly_3Dmesh_comp_exp_v3.m' provided you have the mesh input of the experimental grain structure
 and also the experimental diffraction images, which by default named as 'proj0000.tiff' alike.
 
