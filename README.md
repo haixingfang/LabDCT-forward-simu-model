@@ -25,6 +25,8 @@ This requires input from step 1 to run the simulations of diffraction images.
 Note to remember check the experimental parameter defined in 'exp_parameters.m'.
 Images will be saved in the '\TFT\' folder and data saved in the '\DA\' folder.
 
+If the meshed input structure already exists, one can skip the first step and directly run 'diffLabDCTsim_poly_3Dmesh.m'.
+
 # Others
 If you wish to compare the simulated diffraction image with the experimental one as well as analyzing experimental LabDCT data.
 You can run 'diffLabDCTsim_poly_3Dmesh_comp_exp_v3.m' provided you have the mesh input of the experimental grain structure
