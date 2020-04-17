@@ -200,12 +200,16 @@ for m=1:length(Gr_unique)
             else
 % %                     [frame_select_bin,frame_select_bg] = threshold(frame_select,'otsu',Inf);
 %                     [frame_select_bin,frame_select_bg] = threshold(frame_select,'background',Inf);
+					if sum(LIA)==0 % only one spot in the ROI
 %                         if max(max(frame_select))<=thres1*1.5
                         [frame_select_bin,frame_select_bg1] = threshold(frame_select,'otsu',Inf);
 %                         else
                         [frame_select_bin,frame_select_bg2] = threshold(frame_select,'background',Inf);
 %                         end
-                frame_select_bg=1/2*frame_select_bg1+1/2*frame_select_bg2;
+						frame_select_bg=1/2*frame_select_bg1+1/2*frame_select_bg2;
+					else
+						[frame_select_bin,frame_select_bg] = threshold(frame_select,'otsu',Inf);
+					end
                 frame_select_bin=frame_select>frame_select_bg;
                 if frame_select_bg<thres1
                     frame_select_bin=frame_select>thres1;
