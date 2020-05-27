@@ -197,8 +197,8 @@ for rot = [-146]  % rotation  angle
     % Generate orientations of the grains and loop over all grains
 %     for grainno = 1:abs(grains)
     for grainno = [4 5 6 7 8]
-        NewProj{rot_number,grainno}=newim(detysize,detzsize);
-        NewProj_bin{rot_number,grainno}=newim(detysize,detzsize);
+%        NewProj{rot_number,grainno}=newim(detysize,detzsize);
+%        NewProj_bin{rot_number,grainno}=newim(detysize,detzsize);
         if rot_number==1
             ImStack_exp_seg{grainno}=newim(detysize,detzsize);
             ImStack_exp_raw{grainno}=newim(detysize,detzsize);
@@ -526,6 +526,8 @@ for rot = [-146]  % rotation  angle
                                 imdata_gr_COM=[NaN NaN];
                                 imdata_gr_ca=NaN;
                                 visibility_flag=0;
+								imdata_spot_int=[NaN NaN];
+                                imdata_bg_int=[NaN NaN];
                             end
 %                             imdata_gr_spot=imdata_gr_bin.*imdata_gr;
                             imdata_gr_spot=imdata_gr_bin.*cut(imdata,CropRec(3:4),CropRec(1:2)-1);
@@ -559,8 +561,8 @@ for rot = [-146]  % rotation  angle
                             ImStack_exp_raw{grainno}(CropRec(1):CropRec(1)+CropRec(3)-1,CropRec(2):CropRec(2)+CropRec(4)-1)=imdata_gr+ ...
                                 ImStack_exp_raw{grainno}(CropRec(1):CropRec(1)+CropRec(3)-1,CropRec(2):CropRec(2)+CropRec(4)-1);
                             end
-                            NewProj{rot_number,grainno}(CropRec(1):CropRec(1)+CropRec(3)-1,CropRec(2):CropRec(2)+CropRec(4)-1)=imdata_gr;
-                            NewProj_bin{rot_number,grainno}(CropRec(1):CropRec(1)+CropRec(3)-1,CropRec(2):CropRec(2)+CropRec(4)-1)=closing(imdata_gr_bin,2,'elliptic');                    
+    %                        NewProj{rot_number,grainno}(CropRec(1):CropRec(1)+CropRec(3)-1,CropRec(2):CropRec(2)+CropRec(4)-1)=imdata_gr;
+    %                        NewProj_bin{rot_number,grainno}(CropRec(1):CropRec(1)+CropRec(3)-1,CropRec(2):CropRec(2)+CropRec(4)-1)=closing(imdata_gr_bin,2,'elliptic');                    
     %                         if sum(ImStack_simu{grainno}(CropRec(1):CropRec(1)+CropRec(3)-1,CropRec(2):CropRec(2)+CropRec(4)-1))==0
                             ImStack_simu{grainno}(CropRec(1):CropRec(1)+CropRec(3)-1,CropRec(2):CropRec(2)+CropRec(4)-1)=im_gr_seg+ ...
                                 ImStack_simu{grainno}(CropRec(1):CropRec(1)+CropRec(3)-1,CropRec(2):CropRec(2)+CropRec(4)-1);
