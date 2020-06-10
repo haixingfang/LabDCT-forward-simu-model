@@ -40,5 +40,8 @@ Examples of input and one experimental LabDCT projection image can be found in t
 # Remind
 ## Always start with simulations for one projection at a certain rotation angle before running simulations for a whole dataset, e.g. 181 projections for a full rotation of 360 degrees.
 
+# Free to use only for non-commercial purpose 
+This package is only for non-commercial use by students and staff in Universities or other research institutes.
+
 ## Contact via hfang@mek.dtu.dk or haixingfang868@gmail.com
 
