@@ -38,7 +38,7 @@ The output images will be saved in the '\TFT_cmp\' folder and data saved in the 
 Examples of input and one experimental LabDCT projection image can be found in the '\Examples\' folder.
 
 # Remind
-## Always start with simulations for one projection at a certain rotation angle before running simulations for a whole dataset, e.g. 181 projections for a full rotation of 360 degrees.
+Always start with simulations for one projection at a certain rotation angle before running simulations for a whole dataset, e.g. 181 projections for a full rotation of 360 degrees.
 
 # Free to use only for non-commercial purpose 
 This package is only for non-commercial use by students and staff in Universities or other research institutes.
