@@ -303,17 +303,8 @@ for rot = [-146]  % one projection
         end
         A=[A;SubA_eff{grainno}];
     end % loop over grains
-    bgint_gen; % generate background noise, move to here on March 25,2020
-    thres1=bgint+sqrt(bgint);
-    %Make diffraction images
-    if makeframes == 1
-        peakshape=1; % recommended to employ Gaussian point spread
-        makeimage_poly_3Dmesh_v3;
-    else
-        disp('Diffraction images are not formed ... Set makeframes equal to 1 for generating images.')
-    end
-    
-    % check DA and TFT folders exist
+	
+	% check DA and TFT folders exist
     if ~exist('TFT', 'dir')
        mkdir('TFT'); % TFT folder is to store each output projection
        direc = 'TFT';  % save frames in this directory
@@ -322,6 +313,16 @@ for rot = [-146]  % one projection
     end
     if ~exist('DA', 'dir')
        mkdir('DA'); % DA folder is to store data record for each projection
+    end
+	
+    bgint_gen; % generate background noise, move to here on March 25,2020
+    thres1=bgint+sqrt(bgint);
+    %Make diffraction images
+    if makeframes == 1
+        peakshape=1; % recommended to employ Gaussian point spread
+        makeimage_poly_3Dmesh_v3;
+    else
+        disp('Diffraction images are not formed ... Set makeframes equal to 1 for generating images.')
     end
     
     A_rot{rot_number}=A;
