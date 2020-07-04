@@ -24,6 +24,9 @@
 % improved the segmentation of simu and exp spots
 % record the intensity pair
 % changed the 'DA' to 'DA_cmp' and 'TFT' to 'TFT_cmp'
+% updates June 22, 2020
+% corrected Lorentz factor
+% add sample attenuation and detective quantum efficiency
 
 % Haixing Fang, hfang@mek.dtu.dk, haixingfang868@gmail.com
 
@@ -138,6 +141,23 @@ else
     disp('Please set readhkl as 0 for automatic generation of hkl reflections ');
 end
 % save([direc,'/Ahkl.mat'],'Ahkl','-MAT')
+% read transmission data and CsI scintillator data, add on June 22, 2020
+[Transmission rou]=ReadTransData(atomparam.atomno); % [(-), g/cm^3]
+[CsI Swank]=ReadCsI();
+
+if ~exist('Lx','var')
+    L_xy=[];
+    for i=1:length(SubGrain)
+        L_xy=[L_xy;max(abs(SubGrain{i}(:,2))) max(abs(SubGrain{i}(:,3)))];
+    end
+    Rsample=sqrt(max(L_xy(:,1))^2+max(L_xy(:,2))^2); %[mm]
+%     Rsample=max([max(L_xy(:,1)) max(L_xy(:,2))]);
+    Lx=Rsample*2e3; % [um]
+    SampleCylinderFlag=0;
+else
+    Rsample=0.5*Lx*1e-3; % [mm]
+    SampleCylinderFlag=1;
+end
 
 rot_number=1; % recording number of rotations
 rot_start=-180;
@@ -286,53 +306,55 @@ for rot = [-146]  % rotation  angle
                         diffvec = L2*sintth/sin(phiy); % [mm]
                         Kd = Ki_max + Gt';
                         shkl = norm(Kd)-Klen_max;
-                            if shkl == 0.0
-                                ds = 1;
-                            else
-                                ds = (sin(pi*shkl)/(pi*shkl))^2;
-                            end
-                            SubA{grainno}(nr,1) = nr;
-                            SubA{grainno}(nr,2) = grainno;
-                            SubA{grainno}(nr,3) = nrefl;
-                            SubA{grainno}(nr,4:6) = hkl';
-                            SubA{grainno}(nr,7) = Ahkl(j,5);
-                            SubA{grainno}(nr,8) = phi1*180/pi;
-                            SubA{grainno}(nr,9) = Phi*180/pi;
-                            SubA{grainno}(nr,10) = phi2*180/pi;
-                            SubA{grainno}(nr,11:13) = Gt';
-                            SubA{grainno}(nr,14) = rot;% omega [deg]
-                            SubA{grainno}(nr,15)= 2*theta*180/pi;
-                            
-                            eta=atan2(Gt(3),-Gt(2)); % [0, -pi] and [0, pi]
-                            if eta>0
-                                eta=eta-pi/2;
-                                if eta<0
-                                    eta=eta+2*pi;
-                                end
-                            else
-                                eta=eta+3/2*pi;
-                            end
-                            SubA{grainno}(nr,16) = eta*180/pi;% [0 360] eta [deg]
-                            % angle between PQ vector and the vertical
-                            % axis, modified on Feb 26, 2020
-                            eta=acos(dot([0 Gt(2) Gt(3)]/norm([0 Gt(2) Gt(3)]),[0 0 1]/norm([0 0 1])));
-                            SubA{grainno}(nr,16) = eta*180/pi;% [0 360] eta [deg]
-                            
-                            SubA{grainno}(nr,23) = subgrainno;
-                            konst = norm([0 Gt(2) Gt(3)]);
+                        if shkl == 0.0
+                            ds = 1;
+                        else
+                            ds = (sin(pi*shkl)/(pi*shkl))^2;
+                        end
+                        SubA{grainno}(nr,1) = nr;
+                        SubA{grainno}(nr,2) = grainno;
+                        SubA{grainno}(nr,3) = nrefl;
+                        SubA{grainno}(nr,4:6) = hkl';
+                        SubA{grainno}(nr,7) = Ahkl(j,5);
+                        SubA{grainno}(nr,8) = phi1*180/pi;
+                        SubA{grainno}(nr,9) = Phi*180/pi;
+                        SubA{grainno}(nr,10) = phi2*180/pi;
+                        SubA{grainno}(nr,11:13) = Gt';
+                        SubA{grainno}(nr,14) = rot;% omega [deg]
+                        SubA{grainno}(nr,15)= 2*theta*180/pi;
 
-                            dety22 = (center(2)+ (diffvec*Gt(2)/konst)); % dety [mm]
-                            detz22 = (center(3)+ (diffvec*Gt(3)/konst)); % detz [mm]
-                            dety2=dety0+dety22/pixelysize;
-                            detz2=detz0+detz22/pixelzsize;
+                        eta=atan2(Gt(3),-Gt(2)); % [0, -pi] and [0, pi]
+                        if eta>0
+                            eta=eta-pi/2;
+                            if eta<0
+                                eta=eta+2*pi;
+                            end
+                        else
+                            eta=eta+3/2*pi;
+                        end
+                        SubA{grainno}(nr,16) = eta*180/pi;% [0 360] eta [deg]
+                        % angle between PQ vector and the vertical
+                        % axis, modified on Feb 26, 2020
+                        eta=acos(dot([0 Gt(2) Gt(3)]/norm([0 Gt(2) Gt(3)]),[0 0 1]/norm([0 0 1])));
+                        SubA{grainno}(nr,16) = eta*180/pi;% [0 360] eta [deg]
 
-                            SubA{grainno}(nr,17) = dety2;
-                            SubA{grainno}(nr,18) = detz2;                            
-                    %%%%%% Lorentz factor
-    %                    Lorentz=1;
-                        Lorentz=1./(sin(theta).^2.*cos(theta));
-                    SubA{grainno}(nr,19)=Lorentz;
-                    %%%%%% Polarisation
+                        SubA{grainno}(nr,23) = subgrainno;
+                        konst = norm([0 Gt(2) Gt(3)]);
+
+                        dety22 = (center(2)+ (diffvec*Gt(2)/konst)); % dety [mm]
+                        detz22 = (center(3)+ (diffvec*Gt(3)/konst)); % detz [mm]
+                        dety2=dety0+dety22/pixelysize;
+                        detz2=detz0+detz22/pixelzsize;
+
+                        SubA{grainno}(nr,17) = dety2;
+                        SubA{grainno}(nr,18) = detz2;                            
+                        %%%%%% Lorentz factor
+                        % tests show single crystal monochromatic beam best suits LabDCT
+%                             Lorentz=1./(sin(theta).^2.*cos(theta)); % for powder diffraction monochromatic beam
+                        Lorentz=1./(sin(2*theta)); % for single crystal monochromatic beam
+%                         Lorentz=1./(sin(theta^2)); % for polychromatic Laue diffraction, J. Lange 1995                            
+                        SubA{grainno}(nr,19)=Lorentz;
+                        %%%%%% Polarisation
     %                     P=1; % for synchrontron source, polarization is normally perpendicular to plane of scattering
                         P=(1+costth^2)/2; % for lab X-ray producing unpolarized X-ray beam
                         SubA{grainno}(nr,20)=P;
@@ -340,20 +362,24 @@ for rot = [-146]  % rotation  angle
                         %Diffracted intensity
                         SubA{grainno}(nr,21)=0;
                         ee=min(find(Energy>(Energy_hkl-(Energy(2)-Energy(1))) & Energy<(Energy_hkl+(Energy(2)-Energy(1)))));
-                            if SubGrain{grainno}(subgrainno,6)==Inf % few cases the grain volume is Inf due to meshing
-                                SubGrain{grainno}(subgrainno,6)=mean(setdiff(SubGrain{grainno}(:,6),Inf,'rows'));
-                            end
-                            if SubGrain{grainno}(subgrainno,6)>1 && SubGrain{grainno}(subgrainno,6)<400 % identify unit as um
-                                K2(ee) = lambda(ee)^3*SubGrain{grainno}(subgrainno,5)*10^12/V^2; % [dimensionless]
-                            else
-                                K2(ee) = lambda(ee)^3*SubGrain{grainno}(subgrainno,5)*10^21/V^2; % [dimensionless] % identify unit as mm
-                            end
-                            SubA{grainno}(nr,21) = SubA{grainno}(nr,21)+K1*K2(ee)*abs(I0E(ee))*Lorentz*P*Ahkl(j,5)*ExpTime; % intensity [photons]
-                            if Lorentz==1
-                                SubA{grainno}(nr,21)=SubA{grainno}(nr,21)*2e3; % a factor, no physical meaning
-                            else
-                                SubA{grainno}(nr,21)=SubA{grainno}(nr,21); % a factor, no physical meaning
-                            end
+                         [A_Ehkl L_total]=beam_attenuation(SubGrain_posW,Lsam2sou,Lsam2det,dety22,detz22, ...
+                        atomparam,Transmission,rou,Energy_hkl,Rsample); % attenuation intensity factor, June 22, 2020
+                        [DQE_Ehkl]=Detector_efficiency(CsI,Swank,Energy_hkl); % DQE, June 22, 2020                        
+                        if SubGrain{grainno}(subgrainno,6)==Inf % few cases the grain volume is Inf due to meshing
+                            SubGrain{grainno}(subgrainno,6)=mean(setdiff(SubGrain{grainno}(:,6),Inf,'rows'));
+                        end
+                        if SubGrain{grainno}(subgrainno,6)>1 && SubGrain{grainno}(subgrainno,6)<400 % identify unit as um
+                            K2(ee) = lambda(ee)^3*SubGrain{grainno}(subgrainno,5)*10^12/V^2; % [dimensionless]
+                        else
+                            K2(ee) = lambda(ee)^3*SubGrain{grainno}(subgrainno,5)*10^21/V^2; % [dimensionless] % identify unit as mm
+                        end
+                        K2(ee) = A_Ehkl*DQE_Ehkl*K2(ee); % consider attenuation and detector efficiency
+                        SubA{grainno}(nr,21) = SubA{grainno}(nr,21)+K1*K2(ee)*abs(I0E(ee))*Lorentz*P*Ahkl(j,5)*ExpTime; % intensity [photons]
+                        if Lorentz==1
+                            SubA{grainno}(nr,21)=SubA{grainno}(nr,21)*2e3; % a factor, no physical meaning
+                        else
+                            SubA{grainno}(nr,21)=SubA{grainno}(nr,21); % a factor, no physical meaning
+                        end
                         SubA{grainno}(nr,22) = Energy_hkl;
                   end % Loop over Omega solutions
                 end
@@ -375,7 +401,8 @@ for rot = [-146]  % rotation  angle
         end
         A_gr=[A_gr;SubA_eff{grainno}];
         bgint_gen; % generate background noise, move to here on March 25,2020
-        thres1=bgint+sqrt(bgint);
+%         thres1=bgint+sqrt(bgint);
+        thres1=bgint+1;
         thres1=ceil(thres1);
         if ~isempty(A_gr)
             SpotNr_ideal(grainno)=SpotNr_ideal(grainno)+size(unique(A_gr(:,[2 4 5 6]),'rows'),1);

@@ -74,6 +74,9 @@ Ibg=bgPeak.*(mun*Ln+(1-mun)*Gn);
 % imagesc(ygrid,zgrid,Ibg);
 % colormap(jet);
 bgint=Ibg(fix(length(Ygrid)/4),fix(length(Ygrid)/4))./Ibg(fix(length(Ygrid)/2),fix(length(Ygrid)/2))*(2^16-1);% adopted before Nov 21, 2019
+if SampleCylinderFlag==0
+    bgint=918.9030; % set as constant, June 22, 2020
+end
 % bgint=(sum(sum(Ibg(fix(length(Ygrid)/4):fix(length(Ygrid)/3),fix(length(Ygrid)/4):fix(length(Ygrid)/3))))./ ...
 %     (fix(length(Ygrid)/3)-fix(length(Ygrid)/4))^2)./ ...
 %     Ibg(fix(length(Ygrid)/2),fix(length(Ygrid)/2))*(2^16-1); % modified on Nov 21, 2019

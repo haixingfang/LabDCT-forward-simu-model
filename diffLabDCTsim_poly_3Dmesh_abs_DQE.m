@@ -18,7 +18,7 @@
 
 clear all;
 % close all;
-%%% load dipimage, mpt3 and mtex toolbox
+% %%% load dipimage, mpt3 and mtex toolbox
 load_diplib;
 load_mpt3; % see documentation, type 'mptdoc'
 load_mtex;
@@ -117,6 +117,23 @@ else
     disp('Please set readhkl as 0 for automatic generation of hkl reflections ');
 end
 % save([direc,'/Ahkl.mat'],'Ahkl','-MAT')
+% read transmission data and CsI scintillator data, add on June 22, 2020
+[Transmission rou]=ReadTransData(atomparam.atomno); % [(-), g/cm^3]
+[CsI Swank]=ReadCsI();
+
+if ~exist('Lx','var')
+    L_xy=[];
+    for i=1:length(SubGrain)
+        L_xy=[L_xy;max(abs(SubGrain{i}(:,2))) max(abs(SubGrain{i}(:,3)))];
+    end
+    Rsample=sqrt(max(L_xy(:,1))^2+max(L_xy(:,2))^2); %[mm]
+%     Rsample=max([max(L_xy(:,1)) max(L_xy(:,2))]);
+    Lx=Rsample*2e3; % [um]
+    SampleCylinderFlag=0;
+else
+    Rsample=0.5*Lx*1e-3; % [mm]
+    SampleCylinderFlag=1;
+end
 
 rot_number=1; % recording number of rotations
 rot_start=-180;
@@ -259,8 +276,11 @@ for rot = [-146]  % one projection
                             SubA{grainno}(nr,17) = dety2;
                             SubA{grainno}(nr,18) = detz2;                            
                             %%%%%% Lorentz factor
-%                           Lorentz=1;
-                            Lorentz=1./(sin(theta).^2.*cos(theta));
+                            % tests show single crystal monochromatic beam best suits LabDCT
+%                             Lorentz=1./(sin(theta).^2.*cos(theta)); % for powder diffraction monochromatic beam
+                            Lorentz=1./(sin(2*theta)); % for single crystal monochromatic beam
+%                             Lorentz=1./(sin(theta^2)); % for polychromatic Laue diffraction, J. Lange 1995                            
+
                             SubA{grainno}(nr,19)=Lorentz;
                             %%%%%% Polarisation
 %                             P=1; % for synchrontron source, polarization is normally perpendicular to plane of scattering
@@ -270,19 +290,23 @@ for rot = [-146]  % one projection
                             %Diffracted intensity
                             SubA{grainno}(nr,21)=0;
                             ee=min(find(Energy>(Energy_hkl-(Energy(2)-Energy(1))) & Energy<(Energy_hkl+(Energy(2)-Energy(1)))));
-                                if SubGrain{grainno}(subgrainno,6)==Inf % few cases of the polydehron in the grain volume is Inf due to meshing
-                                    SubGrain{grainno}(subgrainno,6)=mean(setdiff(SubGrain{grainno}(:,6),Inf,'rows'));
-                                end
-                                if SubGrain{grainno}(subgrainno,6)>1 && SubGrain{grainno}(subgrainno,6)<400 % identify unit as um
-                                    K2(ee) = lambda(ee)^3*SubGrain{grainno}(subgrainno,5)*10^12/V^2; % [dimensionless]
-                                else
-                                    K2(ee) = lambda(ee)^3*SubGrain{grainno}(subgrainno,5)*10^21/V^2; % [dimensionless] % identify unit as mm
-                                end
-                                SubA{grainno}(nr,21) = SubA{grainno}(nr,21)+K1*K2(ee)*abs(I0E(ee))*Lorentz*P*Ahkl(j,5)*ExpTime; % intensity [photons]
-                                if Lorentz==1
-                                    SubA{grainno}(nr,21)=SubA{grainno}(nr,21)*2e3; % a factor, no physical meaning
-                                end
-                                SubA{grainno}(nr,22) = Energy_hkl;
+                            [A_Ehkl L_total]=beam_attenuation(SubGrain_posW,Lsam2sou,Lsam2det,dety22,detz22, ...
+                            atomparam,Transmission,rou,Energy_hkl,Rsample); % attenuation intensity factor, June 22, 2020
+                            [DQE_Ehkl]=Detector_efficiency(CsI,Swank,Energy_hkl); % DQE, June 22, 2020                         
+                            if SubGrain{grainno}(subgrainno,6)==Inf % few cases of the polydehron in the grain volume is Inf due to meshing
+                                SubGrain{grainno}(subgrainno,6)=mean(setdiff(SubGrain{grainno}(:,6),Inf,'rows'));
+                            end
+                            if SubGrain{grainno}(subgrainno,6)>1 && SubGrain{grainno}(subgrainno,6)<400 % identify unit as um
+                                K2(ee) = lambda(ee)^3*SubGrain{grainno}(subgrainno,5)*10^12/V^2; % [dimensionless]
+                            else
+                                K2(ee) = lambda(ee)^3*SubGrain{grainno}(subgrainno,5)*10^21/V^2; % [dimensionless] % identify unit as mm
+                            end
+                            K2(ee) = A_Ehkl*DQE_Ehkl*K2(ee); % consider attenuation and detector efficiency
+                            SubA{grainno}(nr,21) = SubA{grainno}(nr,21)+K1*K2(ee)*abs(I0E(ee))*Lorentz*P*Ahkl(j,5)*ExpTime; % intensity [photons]
+                            if Lorentz==1
+                                SubA{grainno}(nr,21)=SubA{grainno}(nr,21)*2e3; % a factor, no physical meaning
+                            end
+                            SubA{grainno}(nr,22) = Energy_hkl;
                     end % Loop over possible 2-theta range
                 end
                 end
@@ -316,7 +340,9 @@ for rot = [-146]  % one projection
     end
 	
     bgint_gen; % generate background noise, move to here on March 25,2020
-    thres1=bgint+sqrt(bgint);
+%     thres1=bgint+sqrt(bgint);
+    thres1=bgint+1;
+    thres1=ceil(thres1);
     %Make diffraction images
     if makeframes == 1
         peakshape=1; % recommended to employ Gaussian point spread
