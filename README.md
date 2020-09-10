@@ -23,7 +23,7 @@ This step is to setup grain structure input, which can be either virtual rendere
 
 ## step 2 - run [diffLabDCTsim_poly_3Dmesh_abs_DQE.m](https://github.com/haixingfang/LabDCT-forward-simu-model/blob/master/diffLabDCTsim_poly_3Dmesh_abs_DQE.m)
 This requires input from step 1 to run the simulations of diffraction images.
-Note to remember check the experimental parameter defined in 'exp_parameters.m'.
+Note to remember check the experimental parameter defined in [exp_parameters.m](https://github.com/haixingfang/LabDCT-forward-simu-model/blob/master/exp_parameters.m).
 Images will be saved in the '\TFT\' folder and data saved in the '\DA\' folder.
 
 If the meshed input structure already exists, one can skip the first step and directly run 'diffLabDCTsim_poly_3Dmesh_abs_DQE.m'.
