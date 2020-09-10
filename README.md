@@ -1,4 +1,4 @@
-# LabDCT forward simulation model
+# [LabDCT forward simulation model](https://github.com/haixingfang/LabDCT-forward-simu-model)
 Code for simulating diffraction patterns of laboratory X-ray diffraction contrast tomography (LabDCT).
 Comparison between simulated and experimental projections are also available.
 The scripts may be continuously updated as work progresses.
