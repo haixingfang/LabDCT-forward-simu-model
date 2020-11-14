@@ -169,7 +169,6 @@ frame_showno=1;
 % delete(gcp);
 SpotsPair=[];
 IntPair=[];
-SpotsFocus=[];
 % for rot =rot_start:rot_step:rot_end % rotation angle, a full dataset
 % for rot =rot_start:2*rot_step:0 % rotation angle, every 2*rot_step projs
 for rot = [-146]  % rotation  angle
@@ -577,16 +576,7 @@ for rot = [-146]  % rotation  angle
                                 (imdata_spot_int(1)-imdata_bg_int(1))/imdata_bg_int(2) ...
                                 (imdata_spot_int(1)-imdata_bg_int(1))/sqrt(imdata_spot_int(2)^2+imdata_bg_int(2)^2)];
                             %%%%% [spot_intint spot_mean spot_sd bg_mean bg_sd SNR1_exp SNR2_exp] for simuand exp
-                            
-                            % focusing and magnification of spot, Oct 30, 2020
-                            d=2*pi/sqrt(sum(A_gr_spot(1,11:13).^2)); % [A]
-                            all_theta=asind(12.398./(A_gr_spot(:,22)*2.*d));
-                            geo_mag1=sqrt(4^2+(2*grainsize(grainno)*sind(mean(all_theta)))^2)/grainsize(grainno);% magnification parallel to diffraction vector 
-                            geo_mag2=(Lsam2det+Lsam2sou)/grainpos(1); % magnification perpendicular to diffraction vector
-                            SpotsFocus=[SpotsFocus;grainsize(grainno) mean(all_theta) 2*grainsize(grainno)*sind(mean(all_theta)) ...
-                                (max(all_theta)-min(all_theta))/2 max(all_theta)-min(all_theta) geo_mag1 geo_mag2];
-                            %%%% [grainsize theta 2Dsin_theta delta_theta_local delta_thetal_whole geo_mag1 geo_mag2]
-                            
+                                                       
                             im_overlay=overlay(imdata_gr,im_gr_bin,[255 0 0;0 255 0;0 0 255;255 255 0; ...
                                 0 255 255;255 0 255;255 85 0;170 255 0;0 170 255;85 0 255;255 0 170; ...
                                 255 170 0;0 255 128;0 85 255;170 0 255;255 0 85]);
@@ -1492,34 +1482,15 @@ if ~isempty(IntPair)
     end
     fclose(fid);
 end
-[data_sec,ia,ib]=intersect(SpotsPair_all,SpotsPair_all_eff,'rows');
-IntPair_eff=IntPair(ia,:);
+[data_sec,ia,ib]=intersect(SpotsPair_all(:,1:21),SpotsPair_all_eff(:,1:21),'rows');
+[ib1 ib1_index]=sort(ib);
+ia1=ia(ib1_index);
+IntPair_eff=IntPair(ia1,:);
 if ~isempty(IntPair_eff)
     fid=fopen(strcat('DA_cmp\','IntPair_all_eff.txt'),'wt');
     fprintf(fid, [header_IntPair '\n']);
     for i=1:length(IntPair_eff(:,1))
         fprintf(fid, '%f %f %f %f %f %f %f %f %f %f %f %f\n', IntPair_eff(i,:));
-    end
-    fclose(fid);
-end
-
-%%%% [grainsize theta 2Dsin_theta delta_theta_local delta_thetal_whole geo_mag1 geo_mag2]
-header_SpotsFocus = ['GrSize_D' ' ' 'theta' ' ' '2Dsin_theta' ' ' 'delta_theta_local' ...
-    ' ' 'delta_theta_whole' ' ' 'geo_mag1' ' ' 'geo_mag2'];
-if ~isempty(SpotsFocus)
-    fid=fopen(strcat('DA_cmp\','SpotsFocus_all.txt'),'wt');
-    fprintf(fid, [header_SpotsFocus '\n']);
-    for i=1:length(SpotsFocus(:,1))
-        fprintf(fid, '%f %f %f %f %f %f %f\n', SpotsFocus(i,:));
-    end
-    fclose(fid);
-end
-SpotsFocus_eff=SpotsFocus(ia,:);
-if ~isempty(SpotsFocus_eff)
-    fid=fopen(strcat('DA_cmp\','SpotsFocus_all_eff.txt'),'wt');
-    fprintf(fid, [header_SpotsFocus '\n']);
-    for i=1:length(SpotsFocus_eff(:,1))
-        fprintf(fid, '%f %f %f %f %f %f %f\n', SpotsFocus_eff(i,:));
     end
     fclose(fid);
 end
