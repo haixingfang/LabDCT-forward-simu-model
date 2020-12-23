@@ -1,6 +1,6 @@
 # [LabDCT forward simulation model](https://github.com/haixingfang/LabDCT-forward-simu-model)
 Code for simulating diffraction patterns of laboratory X-ray diffraction contrast tomography (LabDCT).
-Comparison between simulated and experimental projections are also available.The scripts may be continuously updated as work progresses. The code was developed by [Haixing Fang](https://orcid.org/0000-0001-8114-5276) in his postdoc project woking together with [Prof.dr. Dorte Juul Jensen](https://www.dtu.dk/english/service/phonebook/person?id=38577&tab=2&qt=dtupublicationquery) and [Dr. Yubin Zhang](https://www.dtu.dk/english/service/phonebook/person?id=50135&tab=2&qt=dtupublicationquery). The project is funded by the European Research Council (ERC) under the Europea Union's Horizon 2020 research and innovation programme (M4D - grant agreement 788567).
+Comparison between simulated and experimental projections is also available. The code was developed by [Haixing Fang](https://orcid.org/0000-0001-8114-5276) in his postdoc project woking together with [Prof.dr. Dorte Juul Jensen](https://www.dtu.dk/english/service/phonebook/person?id=38577&tab=2&qt=dtupublicationquery) and [Dr. Yubin Zhang](https://www.dtu.dk/english/service/phonebook/person?id=50135&tab=2&qt=dtupublicationquery). The project is funded by the European Research Council (ERC) under the Europea Union's Horizon 2020 research and innovation programme (M4D - grant agreement 788567). The code may be continuously updated as work progresses.
 
 # Preparations for running the code
 Installing external Matlab toolboxes that are freely accessible:
@@ -44,7 +44,7 @@ This package is free to use, ditribute and adapt for non-commercial use only.
 See [LICENSE](https://github.com/haixingfang/LabDCT-forward-simu-model/blob/master/LICENSE) for license rights and limitations (CC BY-NC 4.0).
 
 # Reference
-[H. Fang, D. Juul Jensen, Y. Zhang, A flexible and standalone forward simulation model for laboratory X-ray diffraction contrast tomography, Acta Crystallographica Section A, 2020, vol.76.](https://doi.org/10.1107/S2053273320010852) <br>
+[H. Fang, D. Juul Jensen, Y. Zhang, A flexible and standalone forward simulation model for laboratory X-ray diffraction contrast tomography, Acta Crystallographica Section A, 2020, vol.76, pp. 652-663.](https://doi.org/10.1107/S2053273320010852) <br>
 Please cite this article if you use or get inspired by the code presented here.
 
 ## Contact via hfang@mek.dtu.dk or haixingfang868@gmail.com
