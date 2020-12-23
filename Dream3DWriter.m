@@ -149,8 +149,9 @@ h5writeatt(dfile,sprintf('/DataContainers/%s/CellEnsembleData/LatticeConstants',
 
 %% write Cellfeaturedata
 
-
+% be aware of necessary modification on the chunk size
 h5create(dfile,sprintf('/DataContainers/%s/CellFeatureData/nVox',dataSetName),size(DS.nVox),'DataType','uint32');
+% h5create(dfile,sprintf('/DataContainers/%s/CellFeatureData/nVox',dataSetName),size(DS.nVox),'DataType','uint32','ChunkSize',[min([5 min(DS.nVox)]) 1]);% Dec 23, 2020
 h5write(dfile,sprintf('/DataContainers/%s/CellFeatureData/nVox',dataSetName),uint32(DS.nVox));
 h5writeatt(dfile,sprintf('/DataContainers/%s/CellFeatureData/nVox',dataSetName),'ComponentDimensions',uint64(1));
 h5writeatt(dfile,sprintf('/DataContainers/%s/CellFeatureData/nVox',dataSetName),'DataArrayVersion',int32(2));
