@@ -142,7 +142,8 @@ else
 end
 % save([direc,'/Ahkl.mat'],'Ahkl','-MAT')
 % read transmission data and CsI scintillator data, add on June 22, 2020
-[Transmission rou]=ReadTransData(atomparam.atomno); % [(-), g/cm^3]
+atomparam_atomno=atomparam.atomno;
+[Transmission rou]=ReadTransData(atomparam_atomno); % [(-), g/cm^3]
 [CsI Swank]=ReadCsI();
 
 if ~exist('Lx','var')
