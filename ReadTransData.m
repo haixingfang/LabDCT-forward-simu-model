@@ -27,7 +27,7 @@ elseif atomparam_atomno==26
     end
     fclose(fileID);
 else
-    sprintf('Warning: you are using transmission data of Al by default. You may want to add transmission data for your own sample!')
+    sprintf('Warning: you are using the transmission data of Al by default. \n You may want to add transmission and density data for your own sample!')
     rou=2.70; % density [g/cm^3]
     fileID=fopen('Al_transmission.txt','r');
     Transmission=[];
