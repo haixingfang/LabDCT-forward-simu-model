@@ -10,7 +10,7 @@ setMTEXpref('aAxisDirection',''); % same as default
 setMTEXpref('FontSize',44); % default: 15
 
 cs = crystalSymmetry('cubic');
-% ss = specimenSymmetry('orthorhombic');
+ss = specimenSymmetry('orthorhombic');
 
 rot = rotation('Euler',euler_grains(:,1)*degree,euler_grains(:,2)*degree,euler_grains(:,3)*degree);
 o = orientation(rot,cs,ss);
