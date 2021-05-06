@@ -53,9 +53,15 @@ else
 end
 for i=1:length(Vsub.Set)
     SubGrain(i,1)=i;
-    SubGrain(i,2)=Vsub.Set(i,1).Data.voronoi.seed(1); % centroid coordinate x
-    SubGrain(i,3)=Vsub.Set(i,1).Data.voronoi.seed(2); % centroid coordinate y
-    SubGrain(i,4)=Vsub.Set(i,1).Data.voronoi.seed(3); % centroid coordinate z
+	if ~isempty(Vsub.Set(i,1).Data)
+        SubGrain(i,2)=Vsub.Set(i,1).Data.voronoi.seed(1); % centroid coordinate x
+        SubGrain(i,3)=Vsub.Set(i,1).Data.voronoi.seed(2); % centroid coordinate y
+        SubGrain(i,4)=Vsub.Set(i,1).Data.voronoi.seed(3); % centroid coordinate z
+    else
+        SubGrain(i,2)=mean(Vsub.Set(i,1).V(:,1));
+        SubGrain(i,3)=mean(Vsub.Set(i,1).V(:,2));
+        SubGrain(i,4)=mean(Vsub.Set(i,1).V(:,3));
+    end
     SubGrain(i,5)=Vsub.Set(i,1).volume; % volume
     if SubGrain(i,5)==Inf
         cc=Polyhedron(Vsub.Set(i,1).V);
