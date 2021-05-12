@@ -320,8 +320,8 @@ for rot = [-146]  % one projection
         if ~isempty(SubA{grainno})
             for kk=1:length(SubA{grainno}(:,1))
                 if (~(all(SubA{grainno}(kk,:))==0) || SubA{grainno}(kk,21)>0) ...
-                        && (SubA{grainno}(kk,17)>=1 && SubA{grainno}(kk,17)<=detzsize ...
-                        && SubA{grainno}(kk,18)>=1 && SubA{grainno}(kk,18)<=detysize)
+                        && (SubA{grainno}(kk,17)>=1 && SubA{grainno}(kk,17)<=detysize ...
+                        && SubA{grainno}(kk,18)>=1 && SubA{grainno}(kk,18)<=detzsize)
                     SubA_eff{grainno}=[SubA_eff{grainno};SubA{grainno}(kk,:)]; % select the data contributing to the intensity on the detector
                 end
             end
