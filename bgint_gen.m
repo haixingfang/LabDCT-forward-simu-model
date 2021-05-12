@@ -73,7 +73,8 @@ Ibg=bgPeak.*(mun*Ln+(1-mun)*Gn);
 % figure;
 % imagesc(ygrid,zgrid,Ibg);
 % colormap(jet);
-bgint=Ibg(fix(length(Ygrid)/4),fix(length(Ygrid)/4))./Ibg(fix(length(Ygrid)/2),fix(length(Ygrid)/2))*(2^16-1);% adopted before Nov 21, 2019
+% bgint=Ibg(fix(length(Ygrid)/4),fix(length(Ygrid)/4))./Ibg(fix(length(Ygrid)/2),fix(length(Ygrid)/2))*(2^16-1);% adopted before Nov 21, 2019
+bgint=Ibg(fix(size(Ygrid,1)/4),fix(size(Ygrid,2)/4))./Ibg(fix(size(Ygrid,1)/2),fix(size(Ygrid,2)/2))*(2^16-1); % modified on May 12, 2021
 if SampleCylinderFlag==0
     bgint=918.9030; % set as constant, June 22, 2020
 end
