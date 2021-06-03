@@ -428,8 +428,8 @@ for rot = [-146]  % rotation  angle
 %                     CropBox(2,2)=round(max(A_gr_spot(:,17)))+min([20 fix((round(max(A_gr_spot(:,17)))-round(min(A_gr_spot(:,17))))/2)]);
                     if CropBox(1,2)-CropBox(1,1)>=2 && CropBox(2,2)-CropBox(2,1)>=2
                         % [xmin ymin width height]
-                        CropRec(1)=detzsize-CropBox(2,2);
-                        CropRec(2)=detysize-CropBox(1,2);
+                        CropRec(1)=detysize-CropBox(2,2);
+                        CropRec(2)=detzsize-CropBox(1,2);
                         if CropRec(1)<1
                             CropRec(1)=1;
                         end
