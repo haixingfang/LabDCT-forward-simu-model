@@ -29,6 +29,16 @@ load_mtex;
 % load(fullfile(strcat(pwd,'\Examples'),'Grain30um_100_100_150_input.mat'));% virtual cylindrical sample 100*100*150 um^3, < d > = 30 um
 load(fullfile(strcat(pwd,'\Examples'),'Grain60um_200_200_300_input.mat'));% virtual cylindrical sample 200*200*300 um^3, < d > = 60 um
 
+if ~exist('TFT', 'dir')
+   mkdir('TFT'); % TFT folder is to store each output projection
+   direc = 'TFT';  % save frames in this directory
+else
+   direc = 'TFT';
+end
+if ~exist('DA', 'dir')
+   mkdir('DA'); % DA folder is to store data record for each projection
+end
+
 exp_parameters; % customize the experimental parameters: Lss, Lsd, detector pixel size etc.
 
 % % change to Fe, as an example
@@ -320,8 +330,8 @@ for rot = [-146]  % one projection
         if ~isempty(SubA{grainno})
             for kk=1:length(SubA{grainno}(:,1))
                 if (~(all(SubA{grainno}(kk,:))==0) || SubA{grainno}(kk,21)>0) ...
-                        && (SubA{grainno}(kk,17)>=1 && SubA{grainno}(kk,17)<=detzsize ...
-                        && SubA{grainno}(kk,18)>=1 && SubA{grainno}(kk,18)<=detysize)
+                        && (SubA{grainno}(kk,17)>=1 && SubA{grainno}(kk,17)<=detysize ...
+                        && SubA{grainno}(kk,18)>=1 && SubA{grainno}(kk,18)<=detzsize)
                     SubA_eff{grainno}=[SubA_eff{grainno};SubA{grainno}(kk,:)]; % select the data contributing to the intensity on the detector
                 end
             end
