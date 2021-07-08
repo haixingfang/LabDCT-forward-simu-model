@@ -6,7 +6,6 @@
 % - Symmetry operations
 % - Systematic absent reflection conditions [1-23] (see sysabs.m)
 %
-% Henning Osholm S�rensen, June 23, 2006.
 
 function sg = sglib(sgno)
 
@@ -9682,7 +9681,8 @@ switch sgno
         sg.symop(191).trans = [0.000000 0.000000 0.000000];
         sg.symop(192).rot = [0 0 1; 0 1 0; 1 0 0 ];
         sg.symop(192).trans = [0.500000 0.500000 0.000000];
-        sg.sysconditions = [2 2 2 2 0 0 0 0 4 0 2 2 4 2 2 4 2 2 4 4 2 2 2];
+		%sg.sysconditions = [2 2 2 2 0 0 0 0 4 0 2 2 4 2 2 4 2 2 4 4 2 2 2]; % find this is wrong 
+        sg.sysconditions = [2 2 2 2 0 0 0 0 2 0 2 2 4 2 2 4 2 2 4 4 2 2 2]; % corrected on june 29, 2021
     case 228
         sg.no = 228;
         sg.name = 'Fd-3c';
