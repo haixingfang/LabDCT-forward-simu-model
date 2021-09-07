@@ -55,6 +55,9 @@ if ~isempty(strfind(str, 'Rodrigues'))
             resultFile.RodVec(i,:) = [0 0 0];
         else
             resultFile.RodVec(i,:) = ex(:,1)'; % each row represents Rodrigues vector for each grain
+			if sum(ex(:,1)'>2*pi)==0
+                resultFile.EulerZXZ(i,:)=resultFile.EulerZXZ(i,:)*180/pi; % [degrees]
+            end
         end
     end
 end
